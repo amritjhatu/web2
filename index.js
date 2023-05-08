@@ -10,6 +10,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 12;
 
 const app = express();  
+app.set("view engine", "ejs");
+
 
 app.use(express.urlencoded({extended: false}));
 
@@ -73,6 +75,22 @@ app.get('/', (req, res) => {
   } 
 });
 
+function Admin(req) {
+    return req.session.user_type === 'admin';
+  }
+  
+  function adminAuth(req, res, next) {
+    if (!(Admin(req))) {
+      res.status(403);
+      res.render("errorMessage", { error: "You are not authorized to be here." });
+      return;
+    } else {
+      next();
+    }
+  }
+
+
+
 app.get('/signup', (req,res) => {
   var html = `
     Create your user here
@@ -124,6 +142,7 @@ app.post('/submitUser', async (req,res) => {
 
   req.session.authenticated = true;
   req.session.email = email;
+  req.session.user_type = result[0].user_type; 
   req.session.cookie.maxAge = expireTime;
   req.session.name = name;
 
@@ -175,6 +194,27 @@ const slothCarousel = '/sloth' + rNum + '.gif';
   res.send(html);
 });
 
+app.get("/admin",adminAuth, async (req, res) => {
+    const result = await userCollection
+      .find()
+      .project({ username: 1, _id: 1, user_type: 1 });
+    const users = await result.toArray();
+    res.render("admin", { users: users });
+  });
+  
+
+  app.get("/promote/:id",adminAuth,async(req,res) => {
+    const userId = req.params.id;
+    await userCollection.updateOne({_id: new mongodb.ObjectId(userId)}, {$set: {user_type: "admin"}});
+    res.redirect("/admin");
+  })
+  
+  app.get("/demote/:id",adminAuth,async(req,res) => {
+    const userId = req.params.id;
+    await userCollection.updateOne({_id: new mongodb.ObjectId(userId)}, {$set: {user_type: "user"}});
+    res.redirect("/admin");
+  })
+
 app.post('/loggingin', async (req,res) => {
   var name = req.body.name;
   var password = req.body.password;
@@ -193,7 +233,7 @@ app.post('/loggingin', async (req,res) => {
 
   const result = await userCollection.find({
     name: name
-  }).project({name: 1, email: 1, password: 1, _id: 1}).toArray();
+  }).project({name: 1, email: 1, password: 1, _id: 1, user_type: 1}).toArray();
   console.log(result);
 
   if(result.length != 1) {
@@ -206,6 +246,7 @@ app.post('/loggingin', async (req,res) => {
     console.log("correct password");
     req.session.authenticated = true;
     req.session.name = name;
+    req.session.user_type = result[0].user_type; 
     req.session.cookie.maxAge = expireTime;
     // This result check was not my idea, got help on that one. Great idea by the way.
     req.session.name = result[0].name; 
