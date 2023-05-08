@@ -289,7 +289,7 @@ app.use(express.static(__dirname + "/public"));
 // Below is a catch all that takes one to a 404 page. 
 app.get("*", (req,res) => {
 	res.status(404);
-	res.send("Page not found - 404");
+	res.render("404");
 })
 
 app.listen(port, () => {
