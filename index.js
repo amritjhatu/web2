@@ -82,7 +82,7 @@ function Admin(req) {
   function adminAuth(req, res, next) {
     if (!(Admin(req))) {
       res.status(403);
-      res.render("errorMessage", { error: "You are not authorized to be here." });
+      res.render("403", { error: "You are not authorized to be here." });
       return;
     } else {
       next();
