@@ -76,18 +76,22 @@ app.get('/', (req, res) => {
 });
 
 function Admin(req) {
-    return req.session.user_type === 'admin';
+  console.log("User type:", req.session.user_type); // Debugging
+  return req.session.user_type === 'admin';
+}
+
+function adminAuth(req, res, next) {
+  if (!(Admin(req))) {
+    console.log("Not an admin!"); // Debugging
+    res.status(403);
+    res.render("403", { error: "You are not authorized to be here." });
+    return;
+  } else {
+    console.log("Is an admin!"); // Debugging
+    next();
   }
-  
-  function adminAuth(req, res, next) {
-    if (!(Admin(req))) {
-      res.status(403);
-      res.render("403", { error: "You are not authorized to be here." });
-      return;
-    } else {
-      next();
-    }
-  }
+}
+
 
 
 
@@ -245,7 +249,7 @@ app.post('/loggingin', async (req,res) => {
     console.log("correct password");
     req.session.authenticated = true;
     req.session.name = name;
-    req.session.user_type = result[0].user_type; 
+    req.session.user_type = result[0].user_type;
     req.session.cookie.maxAge = expireTime;
     // This result check was not my idea, got help on that one. Great idea by the way.
     req.session.name = result[0].name; 
