@@ -196,11 +196,32 @@ app.get("/admin",adminAuth, async (req, res) => {
   });
   
 
-  app.get("/promote/:id",adminAuth,async(req,res) => {
+  app.get("/promote/:id", adminAuth, async (req, res) => {
     const userId = req.params.id;
-    await userCollection.updateOne({_id: new mongodb.ObjectId(userId)}, {$set: {user_type: "admin"}});
+    await userCollection.updateOne(
+      { _id: new mongodb.ObjectId(userId) },
+      { $set: { user_type: "admin" } }
+    );
+  
+    // Update the session information for the promoted user
+    if (req.session._id === userId) {
+      req.session.user_type = "admin";
+    }
+  
     res.redirect("/admin");
-  })
+  });
+  
+  function adminAuth(req, res, next) {
+    console.log("User session: ", req.session); // Debug session information
+    if (!(Admin(req))) {
+      res.status(403);
+      res.render("403", { error: "You are not authorized to be here." });
+      return;
+    } else {
+      next();
+    }
+  }
+  
   
   app.get("/demote/:id",adminAuth,async(req,res) => {
     const userId = req.params.id;
