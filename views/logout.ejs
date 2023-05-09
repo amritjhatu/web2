@@ -1,4 +1,12 @@
-You are logged out.
-<form action="/">
-<button type="submit">Return Home</button>
-</form>
+<%- include("templates/header") %>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6 text-center">
+      <h1 class="mb-4">You are logged out.</h1>
+      <form action="/">
+        <button type="submit" class="btn btn-primary">Return Home</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include("templates/footer") %>

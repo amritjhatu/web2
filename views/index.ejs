@@ -1,20 +1,28 @@
-<%- include("templates/header") %> 
-<% if (!authenticated) { %>
-    <form action="/login">
-    <button type="submit">Log In</button>
-    </form>
-    <form action="/signup">
-    <button type="submit">Sign Up</button>
-    </form>
-<% } else { %>
-    <h1>Hello <%= name %></h1>
-    <br>
-    <form action="/members">
-    <button type="submit">Visit Member's Section</button>
-    </form>
-    <form action="/logout">
-    <button type="submit">Log Out</button>
-    </form>
-<% } %>
-
-<%- include("templates/footer") %> 
+<%- include("templates/header") %>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <% if (!authenticated) { %>
+        <div class="text-center mt-5">
+          <form action="/login" class="d-inline-block">
+            <button type="submit" class="btn btn-primary">Log In</button>
+          </form>
+          <form action="/signup" class="d-inline-block">
+            <button type="submit" class="btn btn-secondary">Sign Up</button>
+          </form>
+        </div>
+      <% } else { %>
+        <h1 class="text-center mt-5">Hello <%= name %></h1>
+        <div class="text-center mt-4">
+          <form action="/members" class="d-inline-block">
+            <button type="submit" class="btn btn-primary">Visit Member's Section</button>
+          </form>
+          <form action="/logout" class="d-inline-block">
+            <button type="submit" class="btn btn-danger">Log Out</button>
+          </form>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include("templates/footer") %>

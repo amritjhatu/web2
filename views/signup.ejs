@@ -1,15 +1,30 @@
-<%- include("templates/header") %> 
-Create your user here
-<br>
-<form action='/submitUser' method='post'>
-<input name='name' type='text' placeholder='username' required>
-<br>
-<input name ='email' type='text' placeholder='email' required>
-<br>
-<input name='password' type='password' placeholder='password' required>
-<br>
-<button>Submit</button>
-</form>
-<%= blank === 'true' ? 'Field is blank. Retry.' :'' %>
-<%= invalid === 'true' ? 'Field is not valid. Retry.' :'' %>
-<%- include("templates/footer") %> 
+<%- include("templates/header") %>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h1 class="text-center mb-4">Create your user here</h1>
+      <form action="/submitUser" method="post">
+        <div class="mb-3">
+          <label for="name" class="form-label">Username</label>
+          <input name="name" type="text" class="form-control" id="name" placeholder="username" required>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input name="email" type="email" class="form-control" id="email" placeholder="email" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input name="password" type="password" class="form-control" id="password" placeholder="password" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+      <% if (blank === 'true') { %>
+      <p class="text-danger mt-2">Field is blank. Retry.</p>
+      <% } %>
+      <% if (invalid === 'true') { %>
+      <p class="text-danger mt-2">Field is not valid. Retry.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+<%- include("templates/footer") %>
