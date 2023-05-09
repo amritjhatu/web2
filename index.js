@@ -61,8 +61,16 @@ app.get('/', (req, res) => {
   if (!req.session.authenticated) {
     res.send(notLoggedIn);
   } else {
-    var loggedIn = 
-	res.render("members");
+    var loggedIn = `
+    <h1>Hello ${req.session.name}</h1>
+    <br>
+    <form action="/members">
+    <button type="submit">Visit Member's Section</button>
+    </form>
+    <form action="/logout">
+    <button type="submit">Log Out</button>
+    </form>
+    `;
     res.send(loggedIn);
   } 
 });
@@ -176,16 +184,7 @@ const rNum = getRandomNumber();
   
 const slothCarousel = '/sloth' + rNum + '.gif';
 
-  var html = `
-      <h1>Hello ${req.session.name}</h1>
-      <img src=${slothCarousel} style='width:250px;'>
-      <form action="/">
-      <button type="submit">Return Home</button>
-      </form>
-      <form action="/logout">
-      <button type="submit">Log Out</button>
-      </form>
-  `;
+  res.render("members");
   res.send(html);
 });
 
