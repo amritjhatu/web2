@@ -1,18 +1,9 @@
-<%- include("templates/header") %>
-    <div class="container-fluid">
-        <br><br>
-        <h1 class="header center">Greetings <%= user %>!</h1>
-        <div class="row">
-            <% const sloth=[ { src: "/sloth1.gif"}, { src: "/sloth2.gif"}, {src: "/sloth3.gif" }, ]; sloths.forEach(function(sloth) { %>
-                <div class="col s12 m6 l4">
-                    <img class="responsive-img" src="<%= sloth.src %>" alt="Sloth">
-                </div>
-                <% }); %>
-        </div>
-        <div class="right" style="padding-right: 10px; padding-bottom: 10px;">
-            <form action="/logout" method="post">
-                <button type="submit" class="waves-effect waves-light btn">Log Out</button>
-            </form>
-        </div>
+<%- include("templates/header") %> 
+    <h2>Greetings, <%= username %> </h2>
+    <div class="row mb-3 text-center">
+        <div class="col-md-4 themed-grid-col"><img class="img-fluid" src="sloth1.gif" alt="sloth" /> </div>
+        <div class="col-md-4 themed-grid-col"><img class="img-fluid" src="sloth2.gif" alt="sloth" /></div>
+        <div class="col-md-4 themed-grid-col"><img class="img-fluid" src="sloth3.gif" alt="sloth" /></div>
     </div>
-    <%- include("templates/footer") %>
+    <a class=" my-3 btn btn-warning" href="/logout">Log Out</a>
+<%- include("templates/footer") %> 
