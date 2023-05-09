@@ -149,6 +149,7 @@ req.session.cookie.maxAge = expireTime;
 req.session.name = name;
 
 
+
   res.redirect('/members');
 });
 
@@ -187,47 +188,31 @@ const slothCarousel = '/sloth' + rNum + '.gif';
   res.render("members", { username: req.session.name });
 });
 
-app.get("/admin",adminAuth, async (req, res) => {
-    const result = await userCollection
-      .find()
-      .project({ username: 1, _id: 1, user_type: 1 });
-    const users = await result.toArray();
-    res.render("admin", { users: users });
-  });
-  
+app.get('/admin', adminAuth, async (req,res) => {
+  const result = await userCollection.find().project({name: 1, email: 1, user_type: 1, _id: 1}).toArray();
+  res.render("admin", {users: result});
+});
 
-  app.get("/promote/:id", adminAuth, async (req, res) => {
-    const userId = req.params.id;
-    await userCollection.updateOne(
-      { _id: new mongodb.ObjectId(userId) },
-      { $set: { user_type: "admin" } }
-    );
-  
-    // Update the session information for the promoted user
-    if (req.session._id === userId) {
-      req.session.user_type = "admin";
-    }
-  
-    res.redirect("/admin");
-  });
-  
-  function adminAuth(req, res, next) {
-    console.log("User session: ", req.session); // Debug session information
-    if (!(Admin(req))) {
-      res.status(403);
-      res.render("403", { error: "You are not authorized to be here." });
-      return;
-    } else {
-      next();
-    }
-  }
-  
-  
-  app.get("/demote/:id",adminAuth,async(req,res) => {
-    const userId = req.params.id;
-    await userCollection.updateOne({_id: new mongodb.ObjectId(userId)}, {$set: {user_type: "user"}});
-    res.redirect("/admin");
-  })
+app.post('/promoteUser', adminAuth, async(req, res) => {
+  const userEmail = req.body.email; // assuming you have this value from the request body
+
+  userCollection.updateOne(
+    { email: userEmail },
+    { $set: { user_type: "admin" } }
+  );
+  res.redirect('/admin');
+});
+
+app.post('/demoteUser', adminAuth, async(req, res) => {
+  const userEmail = req.body.email; // assuming you have this value from the request body
+
+  userCollection.updateOne(
+    { email: userEmail },
+    { $set: { user_type: "user" } }
+  );
+  res.redirect('/admin');
+});
+
 
 app.post('/loggingin', async (req,res) => {
   var name = req.body.name;
