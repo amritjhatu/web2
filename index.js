@@ -171,22 +171,26 @@ log in
   res.send(html);
 });
 
-app.get('/members', (req, res) => {
-  if (!req.session.authenticated) {
-    res.redirect('/login?notLoggedIn=true');
-    return;
-  }
-
-  function getRandomNumber() {
-    return Math.floor(Math.random() * 3) + 1;
-  }  
-const rNum = getRandomNumber();
+app.get('/members', async (req, res) => {
+    if (!req.session.authenticated) {
+      res.redirect('/login?notLoggedIn=true');
+      return;
+    }
   
-const slothCarousel = '/sloth' + rNum + '.gif';
-
-  res.render("members");
-  res.send(html);
-});
+    function getRandomNumber() {
+      return Math.floor(Math.random() * 3) + 1;
+    }  
+    const rNum = getRandomNumber();
+    
+    const slothCarousel = '/sloth' + rNum + '.gif';
+  
+    // get the username from the database and pass it to the view
+    const result = await userCollection.find({
+      email: req.session.email
+    }).toArray();
+  
+    res.render("members", { username: result[0].name, slothCarousel: slothCarousel });
+  });
 
 app.get("/admin",adminAuth, async (req, res) => {
     const result = await userCollection
