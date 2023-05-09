@@ -189,7 +189,12 @@ app.get('/members', async (req, res) => {
       email: req.session.email
     }).toArray();
   
-    res.render("members", { name: result[0].name, slothCarousel: slothCarousel });
+    if (result.length > 0) {
+        res.render("members", { name: result[0].name, slothCarousel: slothCarousel });
+      } else {
+        // Handle case where result is empty
+      }
+      
 
   });
 
