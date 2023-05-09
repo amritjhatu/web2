@@ -184,7 +184,7 @@ const rNum = getRandomNumber();
   
 const slothCarousel = '/sloth' + rNum + '.gif';
 
-  res.render("members");
+  res.render("members", { username: req.session.name });
   res.send(html);
 });
 
