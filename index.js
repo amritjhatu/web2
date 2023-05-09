@@ -148,7 +148,6 @@ await userCollection.insertOne(newUser);
 
 req.session.authenticated = true;
 req.session.email = email;
-req.session.user_type = newUser.user_type;
 req.session.cookie.maxAge = expireTime;
 req.session.name = name;
 
