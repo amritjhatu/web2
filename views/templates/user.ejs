@@ -1,1 +1,15 @@
-<li> <%= user.name %> </li>
+<li>
+    <div style="display: flex; align-items: center;">
+      <span style="flex: 1;"><%= user.name %></span>
+      <div style="display: flex; align-items: center;">
+        <form action="/demoteUser" method="POST">
+          <button type="submit" class="btn btn-danger">Demote</button>
+          <input type="hidden" name="email" value="<%= user.email %>">
+        </form>
+        <form action="/promoteUser" method="POST">
+          <button type="submit" class="btn btn-success">Promote</button>
+          <input type="hidden" name="email" value="<%= user.email %>">
+        </form>
+      </div>
+    </div>
+  </li>
