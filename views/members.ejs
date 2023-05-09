@@ -3,9 +3,9 @@
         <br><br>
         <h1 class="header center">Greetings <%= user %>!</h1>
         <div class="row">
-            <% const pandas=[ { src: "/sloth1.gif"}, { src: "/sloth2.gif"}, {src: "/sloth3.gif" }, ]; sloths.forEach(function(sloth) { %>
+            <% const sloth=[ { src: "/sloth1.gif"}, { src: "/sloth2.gif"}, {src: "/sloth3.gif" }, ]; sloths.forEach(function(sloth) { %>
                 <div class="col s12 m6 l4">
-                    <img class="responsive-img" src="<%= panda.src %>" alt="Sloth">
+                    <img class="responsive-img" src="<%= sloth.src %>" alt="Sloth">
                 </div>
                 <% }); %>
         </div>
