@@ -61,16 +61,8 @@ app.get('/', (req, res) => {
   if (!req.session.authenticated) {
     res.send(notLoggedIn);
   } else {
-    var loggedIn = `
-    <h1>Hello ${req.session.name}</h1>
-    <br>
-    <form action="/members">
-    <button type="submit">Visit Member's Section</button>
-    </form>
-    <form action="/logout">
-    <button type="submit">Log Out</button>
-    </form>
-    `;
+    var loggedIn = 
+	res.render("members");
     res.send(loggedIn);
   } 
 });
