@@ -189,7 +189,8 @@ app.get('/members', async (req, res) => {
       email: req.session.email
     }).toArray();
   
-    res.render("members", { username: result[0].name, slothCarousel: slothCarousel });
+    res.render("members", { name: result[0].name, slothCarousel: slothCarousel });
+
   });
 
 app.get("/admin",adminAuth, async (req, res) => {
