@@ -171,32 +171,22 @@ log in
   res.send(html);
 });
 
-app.get('/members', async (req, res) => {
-    if (!req.session.authenticated) {
-      res.redirect('/login?notLoggedIn=true');
-      return;
-    }
-  
-    function getRandomNumber() {
-      return Math.floor(Math.random() * 3) + 1;
-    }  
-    const rNum = getRandomNumber();
-    
-    const slothCarousel = '/sloth' + rNum + '.gif';
-  
-    // get the username from the database and pass it to the view
-    const result = await userCollection.find({
-      email: req.session.email
-    }).toArray();
-  
-    if (result.length > 0) {
-        res.render("members", { name: result[0].name, slothCarousel: slothCarousel });
-      } else {
-        // Handle case where result is empty
-      }
-      
+app.get('/members', (req, res) => {
+  if (!req.session.authenticated) {
+    res.redirect('/login?notLoggedIn=true');
+    return;
+  }
 
-  });
+  function getRandomNumber() {
+    return Math.floor(Math.random() * 3) + 1;
+  }  
+const rNum = getRandomNumber();
+  
+const slothCarousel = '/sloth' + rNum + '.gif';
+
+  res.render("members");
+  res.send(html);
+});
 
 app.get("/admin",adminAuth, async (req, res) => {
     const result = await userCollection
