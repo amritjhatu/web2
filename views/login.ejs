@@ -1,0 +1,15 @@
+<%- include("templates/header") %> 
+log in
+<form action='/loggingin' method='post'>
+<input name='name' type='text' placeholder='username' required>
+<br>
+<input name='password' type='password' placeholder='password'required>
+<br>
+<button>Submit</button>
+</form>
+<%= incorrect === 'true' ? 'Wrong User value..' :'' %>
+<%= incorrectPass === 'true' ? 'Wrong Password.' :'' %>
+<%= blank === 'true' ? 'Field is blank.' :'' %>
+<%= invalid === 'true' ? 'Format is not valid.' :'' %>
+<%= notLoggedIn === 'true' ? 'You must log in.' :'' %>
+<%- include("templates/footer") %> 

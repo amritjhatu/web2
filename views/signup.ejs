@@ -1,0 +1,15 @@
+<%- include("templates/header") %> 
+Create your user here
+<br>
+<form action='/submitUser' method='post'>
+<input name='name' type='text' placeholder='username' required>
+<br>
+<input name ='email' type='text' placeholder='email' required>
+<br>
+<input name='password' type='password' placeholder='password' required>
+<br>
+<button>Submit</button>
+</form>
+<%= blank === 'true' ? 'Field is blank. Retry.' :'' %>
+<%= invalid === 'true' ? 'Field is not valid. Retry.' :'' %>
+<%- include("templates/footer") %> 

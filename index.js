@@ -49,31 +49,9 @@ const port = process.env.PORT || 8080;
 
 
 app.get('/', (req, res) => {
-    var notLoggedIn = (`
-    <form action="/login">
-    <button type="submit">Log In</button>
-    </form>
-    <form action="/signup">
-    <button type="submit">Sign Up</button>
-    </form>
-  `);
-
-  if (!req.session.authenticated) {
-    res.send(notLoggedIn);
-  } else {
-    var loggedIn = `
-    <h1>Hello ${req.session.name}</h1>
-    <br>
-    <form action="/members">
-    <button type="submit">Visit Member's Section</button>
-    </form>
-    <form action="/logout">
-    <button type="submit">Log Out</button>
-    </form>
-    `;
-    res.send(loggedIn);
-  } 
+  res.render('index', { authenticated: req.session.authenticated, name: req.session.name });
 });
+
 
 function Admin(req) {
   console.log("User type:", req.session.user_type); // Debugging
@@ -93,26 +71,10 @@ function adminAuth(req, res, next) {
 }
 
 
-
-
 app.get('/signup', (req,res) => {
-  var html = `
-    Create your user here
-    <br>
-    <form action='/submitUser' method='post'>
-    <input name='name' type='text' placeholder='username' required>
-    <br>
-    <input name ='email' type='text' placeholder='email' required>
-    <br>
-    <input name='password' type='password' placeholder='password' required>
-    <br>
-    <button>Submit</button>
-    </form>
-    ${req.query.blank === 'true' ? 'Field is blank. Retry.' :''}
-    ${req.query.invalid === 'true' ? 'Field is not valid. Retry.' :''}
-  `;
-  res.send(html);
+  res.render('signup', { blank: req.query.blank, invalid: req.query.invalid });
 });
+
 
 app.post('/submitUser', async (req,res) => {
   var name = req.body.name;
@@ -157,23 +119,9 @@ req.session.name = name;
 });
 
 app.get('/login', (req,res) => {
-var html = `
-log in
-    <form action='/loggingin' method='post'>
-    <input name='name' type='text' placeholder='username' required>
-    <br>
-    <input name='password' type='password' placeholder='password'required>
-    <br>
-    <button>Submit</button>
-    </form>
-    ${req.query.incorrect === 'true' ? 'Wrong User value..' :''}
-    ${req.query.incorrectPass === 'true' ? 'Wrong Password.' :''}
-    ${req.query.blank === 'true' ? 'Field is blank.' :''}
-    ${req.query.invalid === 'true' ? 'Format is not valid.' :''}
-    ${req.query.notLoggedIn === 'true' ? 'You must log in.' :''}
-`;
-  res.send(html);
+  res.render('login', { incorrect: req.query.incorrect, incorrectPass: req.query.incorrectPass, blank: req.query.blank, invalid: req.query.invalid, notLoggedIn: req.query.notLoggedIn });
 });
+
 
 app.get('/members', (req, res) => {
   if (!req.session.authenticated) {
@@ -260,15 +208,10 @@ app.post('/loggingin', async (req,res) => {
 });
 
 app.get('/logout', (req, res) => {
-    req.session.destroy();
-      var html = `
-      You are logged out.
-      <form action="/">
-      <button type="submit">Return Home</button>
-      </form>
-      `;
-    res.send(html);
-  }); 
+  req.session.destroy();
+  res.render('logout');
+});
+
 
 app.get('/sloth/:id', (req,res) => {
 
